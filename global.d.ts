@@ -3,6 +3,4 @@ declare interface EnumVariant<T, D> {
   data: D;
 }
 
-declare type Id = string;
-
 declare type Option<T> = T | null;
