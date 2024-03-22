@@ -4,36 +4,49 @@ import type { Scheme } from "./types";
 
 type Cursor = { value: number };
 
-const getLen = (view: DataView, cursor: Cursor) => {
+const getLen: Impl<number> = (view, cursor) => {
   const len = view.getUint32(cursor.value, true);
   cursor.value += 4;
   return len;
-}
+};
 
-const getString = (view: DataView, cursor: Cursor) => {
+const getByte: Impl<number> = (view, cursor) => {
+  const byte = view.getUint8(cursor.value);
+  cursor.value++;
+  return byte;
+};
+
+const getString: Impl<string> = (view, cursor) => {
   const len = getLen(view, cursor);
   const u8arr = new Uint8Array(view.buffer, cursor.value, len);
   cursor.value += len;
   const utf8decoder = new TextDecoder();
   const str = utf8decoder.decode(u8arr);
   return str;
-}
+};
+
+const bytesView = (view: DataView, cursor: Cursor, len: number) => {
+  const u8arr = new Uint8Array(view.buffer, cursor.value, len);
+  cursor.value += len;
+  const arr = Array.from(u8arr);
+  return arr.map((n) => n.toString(16).padStart(2, "0")).join("");
+};
+
+type Impl<T = unknown> = (view: DataView, cursor: Cursor) => T;
+type CustomImpls = { [key: string]: Impl };
 
 export const fromSlice = (
   view: DataView,
   scheme: Scheme,
   cursor: Cursor,
+  customImpls: CustomImpls = {},
 ): unknown => {
   switch (scheme.type) {
     case Typ.Bool: {
-      const u8 = view.getUint8(cursor.value);
-      cursor.value++;
-      return u8 !== 0;
+      return getByte(view, cursor) !== 0;
     }
     case Typ.U8: {
-      const u8 = view.getUint8(cursor.value);
-      cursor.value++;
-      return u8;
+      return getByte(view, cursor);
     }
     case Typ.U16: {
       const u16 = view.getUint16(cursor.value, true);
@@ -89,25 +102,20 @@ export const fromSlice = (
       cursor.value += 8;
       return date;
     }
-    case Typ.ID: {
-      const utf8decoder = new TextDecoder();
-      const u8arr = new Uint8Array(view.buffer, cursor.value, 13);
-      cursor.value += 13;
-      const str = utf8decoder.decode(u8arr);
-      return str;
+    case Typ.Fuid: {
+      // 5 bytes timestamp + 1 byte shardId + 2 bytes random
+      const ts = bytesView(view, cursor, 5);
+      const shardId = getByte(view, cursor);
+      const rand = bytesView(view, cursor, 2);
+      return `${ts}-${shardId}-${rand}`;
     }
     case Typ.Bytes: {
-      const len = view.getUint32(cursor.value, true);
-      cursor.value += 4;
-      const u8arr = new Uint8Array(view.buffer, cursor.value, len);
-      cursor.value += len;
-      return u8arr;
+      const len = getLen(view, cursor);
+      return bytesView(view, cursor, len);
     }
     case Typ.ArrayBytes: {
       const len = scheme.data;
-      const u8arr = new Uint8Array(view.buffer, cursor.value, len);
-      cursor.value += len;
-      return u8arr;
+      return bytesView(view, cursor, len);
     }
     case Typ.Array: {
       const [len, child] = scheme.data;
@@ -119,18 +127,16 @@ export const fromSlice = (
       return vec;
     }
     case Typ.Vec: {
-      const u32 = view.getUint32(cursor.value, true);
-      cursor.value += 4;
+      const len = getLen(view, cursor);
       const vec = [];
-      for (let index = 0; index < u32; index++) {
+      for (let index = 0; index < len; index++) {
         const item = fromSlice(view, scheme.data, cursor);
         vec.push(item);
       }
       return vec;
     }
     case Typ.Optional: {
-      const exist = view.getUint8(cursor.value) !== 0;
-      cursor.value++;
+      const exist = getByte(view, cursor) !== 0;
       if (exist) {
         const val = fromSlice(view, scheme.data, cursor);
         return val;
@@ -139,8 +145,7 @@ export const fromSlice = (
       }
     }
     case Typ.SimpleEnum: {
-      const variantVal = view.getUint8(cursor.value);
-      cursor.value++;
+      const variantVal = getByte(view, cursor);
       const name = scheme.data.variants[variantVal];
       return name;
     }
@@ -169,8 +174,7 @@ export const fromSlice = (
       }
     }
     case Typ.Enum: {
-      const variantVal = view.getUint8(cursor.value);
-      cursor.value++;
+      const variantVal = getByte(view, cursor);
       const [name, variant] = scheme.data.variants[variantVal];
       const data = fromSlice(view, variant, cursor);
       return { type: name, data };
@@ -185,16 +189,8 @@ export const fromSlice = (
       return JSON.parse(str);
     }
     case Typ.Custom: {
-      throw Error(`unhandled type: ${JSON.stringify(scheme)}`);
+      return customImpls[scheme.data](view, cursor);
     }
-    // case Typ.Tuple: {
-    //   const tuple: unknown[] = [];
-    //   for (const field of scheme.data) {
-    //     const item = fromSlice(view, field, cursor);
-    //     tuple.push(item);
-    //   }
-    //   return tuple;
-    // }
     default:
       throw Error(`unhandled type: ${JSON.stringify(scheme)}`);
   }

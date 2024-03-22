@@ -1,4 +1,4 @@
-import type { FieldType, Typ, KeyType } from "./ty";
+import type { FieldType, KeyType, Typ } from "./ty";
 
 export const enum KeySchemeType {
   Typed = "Typed",
@@ -140,8 +140,8 @@ export interface TimestampType {
   type: Typ.Timestamp;
 }
 
-export interface IdType {
-  type: Typ.ID;
+export interface FuidType {
+  type: Typ.Fuid;
 }
 
 export interface JsonType {
@@ -170,7 +170,7 @@ export type Scheme =
   | StrType
   | DatetimeType
   | TimestampType
-  | IdType
+  | FuidType
   | BytesType
   | ArrayBytesType
   | ArrayType

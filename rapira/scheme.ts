@@ -1,5 +1,5 @@
-import { FieldType, Typ } from "./ty";
 import type * as r from "./types";
+import { FieldType, Typ } from "./ty";
 import type { Scheme } from "./types";
 
 export const sch = {
@@ -15,7 +15,7 @@ export const sch = {
   str: { type: Typ.Str } as r.StrType,
   dt: { type: Typ.Datetime } as r.DatetimeType,
   ts: { type: Typ.Timestamp } as r.TimestampType,
-  id: { type: Typ.ID } as r.IdType,
+  id: { type: Typ.Fuid } as r.FuidType,
   bytes: { type: Typ.Bytes } as r.BytesType,
   void: { type: Typ.Void } as r.VoidType,
   json: { type: Typ.Json } as r.JsonType,
@@ -123,17 +123,17 @@ export const sch = {
   },
 };
 
-const numberVariants: Scheme = sch.enum('Number', [
-  ['U64', sch.u64],
-  ['I64', sch.i64],
-  ['F64', sch.f64],
+const numberVariants: Scheme = sch.enum("Number", [
+  ["U64", sch.u64],
+  ["I64", sch.i64],
+  ["F64", sch.f64],
 ]);
 const jsonVariants: r.NameAndType[] = [
-  ['Null', sch.void],
-  ['Bool', sch.bool],
-  ['Number',numberVariants],
-  ['String', sch.str],
-  ['Array', sch.vec(sch.json)],
-  ['Object', sch.map(sch.str, sch.json)],
-]
+  ["Null", sch.void],
+  ["Bool", sch.bool],
+  ["Number", numberVariants],
+  ["String", sch.str],
+  ["Array", sch.vec(sch.json)],
+  ["Object", sch.map(sch.str, sch.json)],
+];
 export const jsonValueSchema = sch.enum("Json", jsonVariants);
