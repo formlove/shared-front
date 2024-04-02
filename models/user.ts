@@ -27,16 +27,9 @@ export interface User {
 
 export type UserEntry = Entry<User>;
 
-export const enum UserType {
-  Guest = "Guest",
-  User = "User",
-  Admin = "Admin",
-}
-
 export interface UserSession {
   id: Id;
   userId: Id;
-  userType: UserType;
   created: DateType;
   last: DateType;
   deviceId: string;

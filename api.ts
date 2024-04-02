@@ -100,7 +100,7 @@ export const enum Method {
   Delete = "DELETE",
 }
 
-interface RequestParams {
+export interface RequestParams {
   path: string;
   params?: ParamsType;
   body?: any;
@@ -112,7 +112,6 @@ interface RequestParams {
 }
 
 /**
- * Документация:
  * Все запросы могут вернуть либо ОК,
  * либо Unauthorized 401 - необходимо перенаправить на страницу авторизации?
  * или вывести сообщение о необходимости авторизации

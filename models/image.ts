@@ -1,4 +1,4 @@
-import type { Id } from ".";
+import type { Fuid } from ".";
 
 export interface ImageInfo {
   width: number;
@@ -12,7 +12,7 @@ export interface ImageInfo {
 }
 
 export interface Img {
-  imgId: Option<Id>;
+  imgId: Option<Fuid>;
   cfId: string;
   width: number;
   height: number;

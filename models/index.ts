@@ -29,6 +29,7 @@ export type Entry<T, ID = Uid> = T & ID;
 
 export type DateType = Date;
 export type Datetime = string;
+export type Timestamp = string;
 
 export type { User } from "./user";
 
@@ -43,3 +44,7 @@ export interface UserIdentity {
   type: UserIdentityType;
   data: string;
 }
+
+// e81800dca5-242-e806
+// `${ts}-${shardId}-${rand}` where ts: 5 bytes hex, shardId: 0-255, rand: 2 bytes hex
+export type Fuid = `${string}-${string}-${string}`;

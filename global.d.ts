@@ -1,4 +1,4 @@
-declare interface EnumVariant<T, D> {
+declare interface EnumVariant<T, D = undefined> {
   type: T;
   data: D;
 }

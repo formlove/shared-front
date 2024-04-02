@@ -4,7 +4,7 @@ import type { Scheme } from "./types";
 
 type Cursor = { value: number };
 
-const getLen: Impl<number> = (view, cursor) => {
+export const getLen: Impl<number> = (view, cursor) => {
   const len = view.getUint32(cursor.value, true);
   cursor.value += 4;
   return len;
@@ -18,6 +18,7 @@ const getByte: Impl<number> = (view, cursor) => {
 
 const getString: Impl<string> = (view, cursor) => {
   const len = getLen(view, cursor);
+  console.log(len, view.buffer.byteLength, cursor.value);
   const u8arr = new Uint8Array(view.buffer, cursor.value, len);
   cursor.value += len;
   const utf8decoder = new TextDecoder();
@@ -25,7 +26,11 @@ const getString: Impl<string> = (view, cursor) => {
   return str;
 };
 
-const bytesView = (view: DataView, cursor: Cursor, len: number) => {
+export const bytesView = (
+  view: DataView,
+  cursor: Cursor,
+  len: number,
+): string => {
   const u8arr = new Uint8Array(view.buffer, cursor.value, len);
   cursor.value += len;
   const arr = Array.from(u8arr);
@@ -41,6 +46,7 @@ export const fromSlice = (
   cursor: Cursor,
   customImpls: CustomImpls = {},
 ): unknown => {
+  console.log(scheme);
   switch (scheme.type) {
     case Typ.Bool: {
       return getByte(view, cursor) !== 0;

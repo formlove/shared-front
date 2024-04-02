@@ -1,16 +1,14 @@
-import type { FieldType, KeyType, Typ } from "./ty";
+import type { FieldType, Typ, TypedKeyType } from "./ty";
 
 export const enum KeySchemeType {
   Typed = "Typed",
-  Array = "Array",
   Bytes = "Bytes",
 }
 
-export type KeySchemeTyped = EnumVariant<KeySchemeType.Typed, KeyType[]>;
-export type KeySchemeArray = EnumVariant<KeySchemeType.Array, number>;
-export type KeySchemeBytes = EnumVariant<KeySchemeType.Bytes, undefined>;
+export type KeySchemeTyped = EnumVariant<KeySchemeType.Typed, TypedKeyType[]>;
+export type KeySchemeBytes = EnumVariant<KeySchemeType.Bytes>;
 
-export type KeyScheme = KeySchemeTyped | KeySchemeArray | KeySchemeBytes;
+export type KeyScheme = KeySchemeTyped | KeySchemeBytes;
 
 export interface BoolType {
   type: Typ.Bool;

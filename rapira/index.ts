@@ -1,7 +1,13 @@
-import { fromSlice } from "./from-slice";
-import type { JsKeyType} from "./ty";
-import { KeyType } from "./ty";
-import type { KeyScheme, Scheme } from "./types";
+import { bytesView, fromSlice, getLen } from "./from-slice";
+import type { JsKeyType, KeyVal, TypedKeyType } from "./ty";
+import { FieldType, KeyVariant, Typ } from "./ty";
+import type {
+  KeyScheme,
+  NameAndType,
+  NamedFields,
+  Scheme,
+  StructType,
+} from "./types";
 import { KeySchemeType } from "./types";
 
 export { sch } from "./scheme";
@@ -42,47 +48,35 @@ const keyDeser = (
     case KeySchemeType.Typed: {
       const arr = [];
       for (const item of scheme.data) {
-        switch (item) {
-          case KeyType.U8: {
+        switch (item.type) {
+          case KeyVariant.U8: {
             const u8 = view.getUint8(cursor.value);
             arr.push(u8);
             cursor.value++;
             break;
           }
-          case KeyType.U32: {
+          case KeyVariant.U32: {
             const num = view.getUint32(cursor.value);
             arr.push(num);
             cursor.value += 4;
             break;
           }
-          case KeyType.U64: {
-            const num = view.getBigUint64(cursor.value);
-            arr.push(num);
-            cursor.value += 4;
+          case KeyVariant.Array: {
+            const len = item.data.size;
+            const slice = bytesView(view, cursor, len);
+            arr.push(slice);
             break;
           }
           default:
             throw Error(`unhandled type in key: ${JSON.stringify(item)}`);
         }
       }
-      return arr.join("");
-    }
-    case KeySchemeType.Array: {
-      const len = scheme.data;
-      const bytes = new Uint8Array(view.buffer, cursor.value, len);
-      cursor.value += len;
-      return Array.from(bytes)
-        .map((i) => i.toString(16).padStart(2, "0"))
-        .join("");
+      // console.log(arr);
+      return arr;
     }
     case KeySchemeType.Bytes: {
-      const len = view.getUint32(cursor.value, true);
-      cursor.value += 4;
-      const bytes = new Uint8Array(view.buffer, cursor.value, len);
-      cursor.value += len;
-      return Array.from(bytes)
-        .map((i) => i.toString(16).padStart(2, "0"))
-        .join("");
+      const len = getLen(view, cursor);
+      return bytesView(view, cursor, len);
     }
   }
 };
@@ -92,7 +86,7 @@ export const entryDeser = (
   keyScheme: KeyScheme,
   valScheme: Scheme,
   cursor: { value: number },
-): { key: number[] | string; val: unknown } => {
+): KeyVal => {
   const key = keyDeser(view, keyScheme, cursor);
   const val = fromSlice(view, valScheme, cursor);
   return { key, val };
@@ -106,8 +100,10 @@ export const vecEntryDeser = (
   const arr = [];
   const cursor = { value: 0 };
   // const time = performance.now();
-  while (cursor.value < view.byteLength) {
+  const max = view.byteLength - 1;
+  while (cursor.value < max) {
     const entry = entryDeser(view, keyScheme, valScheme, cursor);
+    // console.log("entry", entry);
     arr.push(entry);
   }
   // const timeEnd = performance.now();
@@ -137,4 +133,27 @@ export const stringify = (item: unknown): string => {
   }
 
   return "";
+};
+
+export const keyTypeToString = (type: TypedKeyType): string => {
+  switch (type.type) {
+    case KeyVariant.U8:
+      return "U8";
+    case KeyVariant.U32:
+      return "U32";
+    case KeyVariant.Array:
+      return `Array(${type.data.size})`;
+  }
+};
+
+export const flatten = (scheme: StructType, prefix = ""): NameAndType[] => {
+  return (scheme.data.fields as NamedFields).data.flatMap(([name, scheme]) => {
+    if (
+      scheme.type === Typ.Struct &&
+      scheme.data.fields.type === FieldType.Named
+    ) {
+      return flatten(scheme, prefix + name + ".");
+    }
+    return [[prefix + name, scheme]];
+  });
 };

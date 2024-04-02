@@ -32,10 +32,19 @@ export const enum FieldType {
   Unnamed = "Unnamed",
 }
 
-export const enum KeyType {
+export const enum KeyVariant {
   U8 = "U8",
   U32 = "U32",
-  U64 = "U64",
+  Array = "Array",
 }
 
-export type JsKeyType = string;
+export type KeyTypeU8 = EnumVariant<KeyVariant.U8>;
+export type KeyTypeU32 = EnumVariant<KeyVariant.U32>;
+export type KeyTypeArray = EnumVariant<KeyVariant.Array, { size: number }>;
+
+export type TypedKeyType = KeyTypeU8 | KeyTypeU32 | KeyTypeArray;
+
+export type JsTypedKeyType = (number | string)[];
+export type JsKeyType = string | JsTypedKeyType;
+
+export type KeyVal<T = unknown> = { key: JsKeyType; val: T };
