@@ -47,4 +47,4 @@ export type TypedKeyType = KeyTypeU8 | KeyTypeU32 | KeyTypeArray;
 export type JsTypedKeyType = (number | string)[];
 export type JsKeyType = string | JsTypedKeyType;
 
-export type KeyVal<T = unknown> = { key: JsKeyType; val: T };
+export interface KeyVal<T = unknown> { key: JsKeyType; val: T }

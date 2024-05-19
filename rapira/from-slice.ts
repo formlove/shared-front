@@ -2,7 +2,7 @@ import { jsonValueSchema } from "./scheme";
 import { FieldType, Typ } from "./ty";
 import type { Scheme } from "./types";
 
-type Cursor = { value: number };
+interface Cursor { value: number }
 
 export const getLen: Impl<number> = (view, cursor) => {
   const len = view.getUint32(cursor.value, true);
@@ -38,7 +38,7 @@ export const bytesView = (
 };
 
 type Impl<T = unknown> = (view: DataView, cursor: Cursor) => T;
-type CustomImpls = { [key: string]: Impl };
+type CustomImpls = Record<string, Impl>;
 
 export const fromSlice = (
   view: DataView,
