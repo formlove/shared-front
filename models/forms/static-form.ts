@@ -1,7 +1,8 @@
 /**
  * типы опросов
  * */
-import type { Datetime, Entry, Id } from "../index";
+import type { Datetime, Entry, Id } from "@libfunc/types";
+
 import type { FormEntry, FormPage } from "./common";
 
 export const enum FormViewType {

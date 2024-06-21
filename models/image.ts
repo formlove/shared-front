@@ -1,4 +1,4 @@
-import type { Fuid } from ".";
+import type { Id } from "@libfunc/types";
 
 export interface ImageInfo {
   width: number;
@@ -12,7 +12,7 @@ export interface ImageInfo {
 }
 
 export interface Img {
-  imgId: Option<Fuid>;
+  imgId: Option<Id>;
   cfId: string;
   width: number;
   height: number;

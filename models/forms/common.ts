@@ -1,4 +1,6 @@
-import type { Datetime, Entry, Id, User } from "../.";
+import type { Datetime, Entry, Id } from "@libfunc/types";
+
+import type { User } from "../user";
 import type { FormItemImage } from "./content/image";
 import type { FormItemMarkdown } from "./content/markdown";
 import type {

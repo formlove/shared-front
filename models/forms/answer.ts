@@ -3,7 +3,8 @@
  * значения удобнее хранить, в опросе могут быть свои значения,
  * значения могут удаляться, добавляться...
  * */
-import type { Id } from "../index";
+import type { Id } from "@libfunc/types";
+
 import type { FieldType } from "./common";
 
 // export const enum PollAnswerType {

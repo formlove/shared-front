@@ -1,4 +1,4 @@
-import type { DateType, Id } from "../index";
+import type { DateType, Id } from "@libfunc/types";
 
 export interface Container {
   id: Id;

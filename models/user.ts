@@ -1,5 +1,6 @@
+import type { DateType, Datetime, Entry, Id } from "@libfunc/types";
+
 import type { Img } from "./image";
-import type { DateType, Datetime, Entry, Id } from "./index";
 
 export type PhoneOrEmail = { phone: string } | { email: string };
 
