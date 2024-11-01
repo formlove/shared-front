@@ -1,6 +1,6 @@
 import type { FieldType } from "../common";
 
-export const enum TextFieldOptionType {
+export enum TextFieldOptionType {
   Any = "Any",
   Url = "Url",
   Email = "Email",

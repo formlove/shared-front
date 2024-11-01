@@ -5,7 +5,7 @@ import type { Datetime, Entry, Id } from "@libfunc/types";
 
 import type { FormEntry, FormPage } from "./common";
 
-export const enum FormViewType {
+export enum FormViewType {
   // классический опрос с несколькими вопросами
   Default = "Default",
   // опрос с единственным вопросом
@@ -24,7 +24,7 @@ export interface StaticFormSettings {
   timeLimit: number; // 0 if not limit
 }
 
-export const enum StaticFormBodyStatus {
+export enum StaticFormBodyStatus {
   Published = "Published",
   Unpublished = "Unpublished",
   Replaced = "Replaced",
@@ -49,7 +49,7 @@ export interface StaticFormBody {
 
 export type FormBodyEntry = Entry<StaticFormBody, StaticFormBodyId>;
 
-export const enum StaticFormType {
+export enum StaticFormType {
   Poll = "Poll",
   Form = "Form",
 }

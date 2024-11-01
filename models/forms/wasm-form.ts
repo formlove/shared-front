@@ -48,7 +48,7 @@ export interface WasmForm {
 
 // TODO: session, request, response?
 
-export const enum ContainerVisible {
+export enum ContainerVisible {
   Public = "Public",
   Contacts = "Contacts",
   Private = "Private",

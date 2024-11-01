@@ -4,7 +4,7 @@ import type { Img } from "./image";
 
 export type PhoneOrEmail = { phone: string } | { email: string };
 
-export const enum WebVisibility {
+export enum WebVisibility {
   Open = "Open",
   Hidden = "Hidden",
 }
@@ -36,7 +36,7 @@ export interface UserSession {
   deviceId: string;
 }
 
-export const enum UserIdentityType {
+export enum UserIdentityType {
   Phone = "Phone",
   Email = "Email",
   Username = "Username",
