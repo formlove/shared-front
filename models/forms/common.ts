@@ -26,7 +26,7 @@ import type { WasmForm } from "./wasm-form";
 /**
  * типы вопросов, перечисление
  * */
-export const enum FieldType {
+export enum FieldType {
   // конкретный ответ из конкретных значений
   Select = "Select",
 
@@ -85,7 +85,7 @@ export interface FormField {
   formFieldData: FormFieldTypes;
 }
 
-export const enum FormItemType {
+export enum FormItemType {
   FormField = "FormField",
   Markdown = "Markdown",
   Image = "Image",
@@ -100,7 +100,7 @@ export type FormItemDataTypes =
   | FormItemImage
   | FormItemButton;
 
-export const enum FormItemContent {
+export enum FormItemContent {
   Markdown = "Markdown",
   Image = "Image",
 }
@@ -113,12 +113,12 @@ export interface FormPage {
   items: FormItem[];
 }
 
-export const enum FormType {
+export enum FormType {
   Static = "Static",
   Wasm = "Wasm",
 }
 
-export const enum FormLinkType {
+export enum FormLinkType {
   Global = "Global",
   Branded = "Branded",
   Named = "Named",
@@ -134,7 +134,7 @@ export interface FormSettings {
   anonymous: boolean;
 }
 
-export const enum FormStatus {
+export enum FormStatus {
   Released = "Released",
   Draft = "Draft",
   Disabled = "Disabled",

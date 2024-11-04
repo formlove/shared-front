@@ -1,9 +1,9 @@
-export const enum PhoneOrEmailField {
+export enum PhoneOrEmailField {
   phone = "phone",
   email = "email",
 }
 
-export const enum UserIdentityType {
+export enum UserIdentityType {
   phone = "phone",
   email = "email",
   username = "username",
