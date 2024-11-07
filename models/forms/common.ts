@@ -31,7 +31,7 @@ export enum FieldType {
   Select = "Select",
 
   // несколько ответов из конкретных значений
-  MultipleSelect = "Several",
+  MultipleSelect = "MultipleSelect",
 
   // диапазон значений (с шагом), например от 1000 до 2000 (с шагом в 500)
   // Range = "Range",
