@@ -4,10 +4,6 @@ import type { User } from "../user";
 import type { FormItemImage } from "./content/image";
 import type { FormItemMarkdown } from "./content/markdown";
 import type {
-  DateField,
-  DateFormField,
-  ImageField,
-  ImageFormField,
   MultipleSelectField,
   MultipleSelectFormField,
   NumberField,
@@ -16,8 +12,6 @@ import type {
   SelectFormField,
   TextField,
   TextFormField,
-  TimeField,
-  TimeFormField,
 } from "./form-fields";
 import type { FormItemButton } from "./interactives/button";
 import type { StaticForm } from "./static-form";
@@ -45,37 +39,31 @@ export enum FieldType {
 
   // указывается конкретное время (в зависимости от точности: секунды, минуты, часы, дни, недели, месяцы, годы)
   // например: 31 декабря 2017 года
-  Date = "Date",
+  // Date = "Date",
 
   // например: в 12 часов 30 минут
-  Time = "Time",
+  // Time = "Time",
 
   // указывается время в количестве (в зависимости от точности: секунды, минуты, часы, дни, недели, месяцы, годы)
   // например: двое суток и 6 часов = 54 часа
   // TimeCount = "TimeCount",
 
   // загрузка файла
-  File = "File",
+  // File = "File",
 }
 
 export type FieldTypes =
   | SelectField
   | MultipleSelectField
   | NumberField
-  | TextField
-  | DateField
-  | TimeField
-  | ImageField;
+  | TextField;
 
 // типы полезной нагрузки для вопросов
 export type FormFieldTypes =
   | SelectFormField
   | MultipleSelectFormField
   | NumberFormField
-  | TextFormField
-  | DateFormField
-  | TimeFormField
-  | ImageFormField;
+  | TextFormField;
 
 // вопрос
 // text, type, data

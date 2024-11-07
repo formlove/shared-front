@@ -8,7 +8,7 @@ export interface TimeField {
   required: boolean;
 }
 
-export type TimeFormField = EnumVariant<FieldType.Time, TimeField>;
+// export type TimeFormField = EnumVariant<FieldType.Time, TimeField>;
 
 export default {
   getDefault: (): TimeField => ({

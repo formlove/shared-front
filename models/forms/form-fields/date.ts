@@ -8,7 +8,7 @@ export interface DateField {
   required: boolean;
 }
 
-export type DateFormField = EnumVariant<FieldType.Date, DateField>;
+// export type DateFormField = EnumVariant<FieldType.Date, DateField>;
 
 export default {
   getDefault: (): DateField => ({

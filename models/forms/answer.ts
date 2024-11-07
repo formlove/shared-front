@@ -1,8 +1,3 @@
-/*
- * как хранить ответы? хранить id ответа, или их значения?
- * значения удобнее хранить, в опросе могут быть свои значения,
- * значения могут удаляться, добавляться...
- * */
 import type { Id } from "@libfunc/types";
 
 import type { FieldType } from "./common";
@@ -66,19 +61,19 @@ export interface DateAnswer {
   value: number | null; // u64 // date, time, datetime
 }
 
-export interface DateAnswerData {
-  type: FieldType.Date;
-  data: DateAnswer;
-}
+// export interface DateAnswerData {
+//   type: FieldType.Date;
+//   data: DateAnswer;
+// }
 
 export interface TimeAnswer {
   value: number | null; // u64 // date, time, datetime
 }
 
-export interface TimeAnswerData {
-  type: FieldType.Time;
-  data: TimeAnswer;
-}
+// export interface TimeAnswerData {
+//   type: FieldType.Time;
+//   data: TimeAnswer;
+// }
 
 export interface TimeCountAnswer {
   value: number | null; // u64
@@ -123,9 +118,9 @@ export type FormFieldAnswerDataTypes =
   | SelectAnswerData
   | SeveralAnswerData
   | NumberAnswerData
-  | TextAnswerData
-  | DateAnswerData
-  | TimeAnswerData;
+  | TextAnswerData;
+// | DateAnswerData
+// | TimeAnswerData;
 
 // ответ на вопрос
 export interface FormFieldAnswer {
